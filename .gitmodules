@@ -1,0 +1,6 @@
+[submodule "minhook"]
+	path = minhook
+	url = https://github.com/TsudaKageyu/minhook.git
+[submodule "bddisasm"]
+	path = bddisasm
+	url = https://github.com/bitdefender/bddisasm.git
