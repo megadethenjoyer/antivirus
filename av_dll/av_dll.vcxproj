@@ -162,6 +162,7 @@
     <ClCompile Include="src\detection\syscall\indirect_syscalls.c" />
     <ClCompile Include="src\ipc\ipc.c" />
     <ClCompile Include="src\debug\log.c" />
+    <ClCompile Include="src\ipc\smipc.c" />
     <ClCompile Include="src\main.c" />
     <ClCompile Include="src\hook\module_hooks.c" />
     <ClCompile Include="src\windows\pe.c" />
@@ -183,6 +184,7 @@
     <ClInclude Include="include\module_hooks.h" />
     <ClInclude Include="include\pe.h" />
     <ClInclude Include="include\rwx.h" />
+    <ClInclude Include="include\smipc.h" />
     <ClInclude Include="include\vec.h" />
     <ClInclude Include="include\windows_helper.h" />
   </ItemGroup>

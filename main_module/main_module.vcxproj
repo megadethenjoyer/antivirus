@@ -148,11 +148,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\ipc.c" />
+    <ClCompile Include="src\ipc_syscall.c" />
     <ClCompile Include="src\main.c" />
+    <ClCompile Include="src\smipc.c" />
     <ClCompile Include="src\windows_helper.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ipc.h" />
+    <ClInclude Include="src\ipc_syscall.h" />
+    <ClInclude Include="src\smipc.h" />
     <ClInclude Include="src\windows_helper.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

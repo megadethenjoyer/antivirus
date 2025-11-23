@@ -1,4 +1,5 @@
 #include <common.h>
+#include <smipc.h>
 
 HANDLE av_module = NULL;
 
@@ -19,11 +20,11 @@ void av_init( HMODULE module ) {
 	g_RtlRestoreContext = GetProcAddress( ntdll, "RtlRestoreContext" );
 
 
-	inds_init( );
-	inds_scan_all_regions( );
+	//inds_init( );
+	//inds_scan_all_regions( );
 
-	hwbpds_init( );
-	hwbpds_scan_all_regions( );
+	//hwbpds_init( );
+	//hwbpds_scan_all_regions( );
 	
 	ipc_init( );
 	ipc_open_pipe( );
@@ -48,6 +49,11 @@ void av_init( HMODULE module ) {
 	// manually calls exception handlers from HWBPDS and INDS
 
 	// hook_create( KiUserExceptionDispatcher, KiUserExceptionDispatcher_hook, NULL );
+
+	smipc_init( );
+
+	log_info( "is_init( )" );
+	is_init( ntdll );
 }
 
 struct dispatcher_arg {

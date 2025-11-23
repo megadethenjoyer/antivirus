@@ -3,11 +3,14 @@
 #include <tlhelp32.h>
 
 #include "windows_helper.h"
+#include "ipc_syscall.h"
 
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "ipc.h"
+#include "smipc.h"
+#include "ipc_syscall.h"
 
 #define DLL_NAME "av_dll.dll"
 #define BUFSIZE ( 1024 )
@@ -37,12 +40,8 @@ int main( ) {
 	system( "pause" );
 	bool quit = false;
 	ipc_init( PIPE_NAME, &quit );
+	smipc_init( );
 	win_foreach_process( process_callback );
-	while ( true ) {
-		if ( quit ) {
-			return EXIT_SUCCESS;
-		}
-		Sleep( 5000 );
-	}
+	is_work( );
 	return EXIT_SUCCESS;
 }

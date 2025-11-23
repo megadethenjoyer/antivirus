@@ -24,12 +24,24 @@
     <ClCompile Include="src\ipc.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\smipc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ipc_syscall.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\windows_helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\ipc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\smipc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ipc_syscall.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
