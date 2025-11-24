@@ -57,6 +57,9 @@ void hook_module( void *base ) {
 	IMAGE_EXPORT_DIRECTORY *export_dir = ( uint8_t * )( base ) + export.VirtualAddress;
 	uint32_t *func_arr = ( uint8_t * )( base )+export_dir->AddressOfFunctions;
 	for ( int i = 0; i < export_dir->NumberOfFunctions; i++ ) {
+		if ( !(i % 20 ) ){
+		log_info( "Hook %d", i );
+		}
 		uint32_t func_rva = func_arr[ export_dir->Base + i ];
 		hook_stub( ( uint8_t * )( base ) + func_rva );
 	}
@@ -74,11 +77,70 @@ void send_init( ) {
 	}
 }
 
+void suspend_all_threads(  ) {
+	HANDLE h = CreateToolhelp32Snapshot( TH32CS_SNAPTHREAD, 0 );
+	THREADENTRY32 t = { 0 };
+	t.dwSize = sizeof( t );
+	Thread32First( h, &t );
+
+	while ( 1 ) {
+		if ( !Thread32Next( h, &t ) ) {
+			break;
+		}
+
+		if ( t.th32OwnerProcessID != GetCurrentProcessId() ) {
+			continue;
+		}
+
+		if ( t.th32ThreadID == GetCurrentThreadId( ) ) {
+			continue;
+		}
+
+		
+		HANDLE th = OpenThread( THREAD_ALL_ACCESS, 0, t.th32ThreadID );
+		SuspendThread( th );
+		CloseHandle( th );
+	}
+
+	CloseHandle( h );
+
+}
+void resume( ) {
+	HANDLE h = CreateToolhelp32Snapshot( TH32CS_SNAPTHREAD, 0 );
+	THREADENTRY32 t = { 0 };
+	t.dwSize = sizeof( t );
+	Thread32First( h, &t );
+
+	while ( 1 ) {
+		if ( !Thread32Next( h, &t ) ) {
+			break;
+		}
+
+
+		if ( t.th32OwnerProcessID != GetCurrentProcessId() ) {
+			continue;
+		}
+
+		if ( t.th32ThreadID == GetCurrentThreadId( ) ) {
+			continue;
+		}
+
+		
+		HANDLE th = OpenThread( THREAD_ALL_ACCESS, 0, t.th32ThreadID );
+		ResumeThread( th );
+		CloseHandle( th );
+	}
+
+	CloseHandle( h );
+}
+
 void is_init( HMODULE ntdll ) {
 	log_info( "Sending init." );
 	send_init( );
 	log_info( "Init done." );
 
+
+	suspend_all_threads( );
 	PEB *peb = ( PEB * )__readgsqword( 0x60 );
 	PEB_LDR_DATA *ldr = peb->Ldr;
 
@@ -115,16 +177,20 @@ void is_init( HMODULE ntdll ) {
 		curr = curr->InMemoryOrderLinks.Flink;
 
 		if ( curr == head ) {
+			log_info( "curr == head" );
 			break;
 		}
 
 		curr = CONTAINING_RECORD( curr, LDR_DATA_TABLE_ENTRY, InMemoryOrderLinks );
+	
 
-
+		log_info( "hook %ws", curr->FullDllName.Buffer );
 		hook_module( curr->DllBase );
 
 
 	}
+
+	resume( );
 
 	//for ( int index = 0; index < sizeof( syscalls ) / sizeof( *syscalls ); index++ ) {
 		//hook_stub( GetProcAddress( ntdll, syscalls[ index ] ) );

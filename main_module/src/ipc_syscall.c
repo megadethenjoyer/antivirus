@@ -47,7 +47,6 @@ void suspend_all_threads( HANDLE process ) {
 	CloseHandle( h );
 
 }
-
 void resume( HANDLE process ) {
 	HANDLE h = CreateToolhelp32Snapshot( TH32CS_SNAPTHREAD, 0 );
 	THREADENTRY32 t = { 0 };
@@ -72,6 +71,7 @@ void resume( HANDLE process ) {
 	CloseHandle( h );
 }
 
+
 void resume_thread( HANDLE h_thread ) {
 	while ( 1 ) {
 		int32_t n = 0;
@@ -83,6 +83,7 @@ void resume_thread( HANDLE h_thread ) {
 		}
 	}	
 }
+
 
 void is_work( ) {
 	HMODULE ntdll = GetModuleHandle( "ntdll" );
@@ -175,7 +176,7 @@ void is_work( ) {
 			cid.UniqueThread = ( HANDLE )( ( uint64_t )( buf->syscall.tid ) );
 			NtOpenThread( &h_thread, THREAD_ALL_ACCESS, &obj, &cid );
 			assert( h_thread );
-			NtSuspendThread( h_thread, NULL );
+			//NtSuspendThread( h_thread, NULL );
 
 			NtGetContextThread( h_thread, &ctx );
 			//printf( "syscall %x with params %llx %llx %llx %llx\n", ( uint32_t )( ctx.Rax ), ctx.Rcx, ctx.Rdx, ctx.R8, ctx.R9 );
@@ -189,7 +190,7 @@ void is_work( ) {
 
 			expecting_post = TRUE;
 
-			resume_thread( h_thread );
+			NtResumeThread( h_thread, NULL );
 		}
 
 		if ( buf->type == msg_init ) {

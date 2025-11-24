@@ -20,12 +20,6 @@ void av_init( HMODULE module ) {
 	g_RtlRestoreContext = GetProcAddress( ntdll, "RtlRestoreContext" );
 
 
-	//inds_init( );
-	//inds_scan_all_regions( );
-
-	//hwbpds_init( );
-	//hwbpds_scan_all_regions( );
-	
 	ipc_init( );
 	ipc_open_pipe( );
 
@@ -54,6 +48,21 @@ void av_init( HMODULE module ) {
 
 	log_info( "is_init( )" );
 	is_init( ntdll );
+	log_info( "all" );
+	log_info( "init done" );
+
+
+	/*hwbpds_init( );
+	log_info( "HWBP init" );
+	hwbpds_scan_all_regions( );
+	log_info( "HWBP scan" );
+
+
+	inds_init( );
+	log_info( "IN init" );
+	inds_scan_all_regions( );
+	log_info( "IN scan" );*/
+
 }
 
 struct dispatcher_arg {
