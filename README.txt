@@ -34,11 +34,13 @@ Need to also implement: detection of new modules
                         don't allow mapping executable code, if it isn't a library (suspicious)
 
 In the end this means that every single syscall possible is hooked. But then how does the program do stuff?
-( In this current version it isn't implemented, but I have it implemented in another version, will merge ASAP )
     - IPC (through shared memory) to main_module.exe which then suspends the entire process, writes the syscall to the thread, resumes only that thread,
       upon syscall execution finished, return to main_module.exe and overwrite the syscall back. Resume whole process
 
     - This way the program can do stuff, and yet every syscall can be checked (and prevented!*) from usermode.
+( Currently this is implemented but has some bugs, race conditions, crashes, hangs, bad stuff. TODO: make a simpler test program,
+  right now I'm testing with notepad.exe which has all sorts of edge cases and is a pain to debug )
+
 
 *you could also do instrumentation callbacks of some sort but you can't easily check the parameters and worst of all, you can't prevent the call
  also, the attacker could just overwrite your callback and then it doesn't get called
